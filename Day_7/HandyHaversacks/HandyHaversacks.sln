@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.808.3
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HandyHaversacks", "HandyHaversacks.csproj", "{0BFD853A-D16D-4E75-88F1-C3D5CE9C3185}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{0BFD853A-D16D-4E75-88F1-C3D5CE9C3185}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0BFD853A-D16D-4E75-88F1-C3D5CE9C3185}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0BFD853A-D16D-4E75-88F1-C3D5CE9C3185}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0BFD853A-D16D-4E75-88F1-C3D5CE9C3185}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {C2E3C614-7AAD-4287-BA75-486A7A76320B}
+	EndGlobalSection
+EndGlobal
