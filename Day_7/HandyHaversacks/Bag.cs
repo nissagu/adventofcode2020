@@ -1,14 +1,14 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections.Generic;
 
 namespace HandyHaversacks
 {
     public class Bag
     {
 
-        public string Color { get; set; }
-        public IDictionary ColorDictionary { get; set; }
+        public string OuterColor { get; set; }
+        public Dictionary<string, int> ColorDictionary { get; set; }
         public int ContainingBagsSum { get; set; }
+
 
     }
 }

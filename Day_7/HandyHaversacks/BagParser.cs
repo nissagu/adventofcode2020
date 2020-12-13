@@ -19,7 +19,7 @@ namespace HandyHaversacks
                 var splitEntry = SplitOuterFromInnerBags(entry);
 
                 // left side = the bag's color
-                bag.Color = GetOuterBagColor(splitEntry[0]);
+                bag.OuterColor = GetOuterBagColor(splitEntry[0]);
 
                 // right side = the colors of bags inside the bag
                 bag.ColorDictionary = GetInnerBagColorDictionary(splitEntry[1]);
@@ -46,7 +46,7 @@ namespace HandyHaversacks
 
         }
 
-        private static IDictionary GetInnerBagColorDictionary(string entry)
+        private static Dictionary<string, int> GetInnerBagColorDictionary(string entry)
         {
             var dictionary = new Dictionary<string, int>();
 
@@ -120,7 +120,8 @@ namespace HandyHaversacks
             // can contain "no other bags" – if that's the case, do nothing
             else
             {
-                dictionary.Add("none", 0);
+                //dictionary.Add("none", 0);
+
             }
 
             return dictionary;
