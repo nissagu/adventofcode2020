@@ -11,7 +11,7 @@ namespace AdapterArray
         {
             var allEntries = new List<int>();
 
-            using (StreamReader streamReader = new StreamReader("/Users/Ruth/Projects/Advent_of_Code/Day_10/input.txt"))
+            using (StreamReader streamReader = new StreamReader("/Users/Ruth/Projects/Advent_of_Code/Day_10/test2.txt"))
             {
 
                 while (streamReader.Peek() >= 0)
@@ -33,9 +33,78 @@ namespace AdapterArray
 
             var joltingsInAscendingOrder = allEntries.AsEnumerable().OrderBy(number => number).ToList();
 
-            // evaluate the following number
-            // if difference = 3 then there's only one option for the arrangement
-            // if difference < 3 ( 1 || 2) there's multiple ways
+            // add values aside from puzzle input to list
+            var chargingOutlet = 0;
+            joltingsInAscendingOrder.Insert(0, chargingOutlet);
+
+            var maxJoltage = joltingsInAscendingOrder.Max();
+            var builtInJoltage = maxJoltage + 3;
+            joltingsInAscendingOrder.Insert(joltingsInAscendingOrder.Count, builtInJoltage);
+
+            var joltingArrangements = new List<List<int>>();
+
+            foreach (var currentJolting in joltingsInAscendingOrder)
+            {
+                // there's no list created, so the first entry creates the first list
+                if (joltingArrangements.Count == 0)
+                {
+                    var firstArrangement = new List<int>() { currentJolting };
+                    joltingArrangements.Add(firstArrangement);
+                }
+                // there is already at least one list
+                else
+                {
+
+                    for (int index = 0; index < joltingArrangements.Count; )
+                    {
+
+                        var currentArrangement = joltingArrangements[index];
+                        // check the difference between the list's last entry and the current jolting entry
+                        var lastEntryInList = currentArrangement.LastOrDefault();
+                        var difference = currentJolting - lastEntryInList;
+
+                        switch (difference)
+                        {
+                            case 3:
+                                {// if the difference is 3, add the element to the current list
+                                    currentArrangement.Add(currentJolting);
+                                    index++;
+                                    break;
+                                }
+                            case 0:
+                                {
+                                    index++;
+                                    break;
+                                }
+                            case < 3:
+                                // if the difference is < 3, dynamically add new arrangements 
+                                {
+                                    var newJoltingArrangement = new List<int>();
+                                    newJoltingArrangement.AddRange(currentArrangement);
+                                    newJoltingArrangement.Add(currentJolting);
+                                    joltingArrangements.Add(newJoltingArrangement);
+                                    index++;
+                                    break;
+                                }
+                            case > 3:
+                                {
+                                    index++;
+                                    break;
+                                }
+                        }
+                    }
+
+
+                }
+
+            }
+
+            // because the whole number of possible arrangements was built without the rule that the built-in
+            // joltage must be the last element, we reduce the result list here regarding this predicate
+            var reducedArrangements =
+                joltingArrangements.Where(arrangement => arrangement.Last() == builtInJoltage).ToList();
+
+            arrangementAmount = reducedArrangements.Count();
 
             return arrangementAmount;
         }
