@@ -11,7 +11,7 @@ namespace AdapterArray
         {
             var allEntries = new List<int>();
 
-            using (StreamReader streamReader = new StreamReader("/Users/Ruth/Projects/Advent_of_Code/Day_10/test2.txt"))
+            using (StreamReader streamReader = new StreamReader("/Users/Ruth/Projects/Advent_of_Code/Day_10/input.txt"))
             {
 
                 while (streamReader.Peek() >= 0)
@@ -27,9 +27,8 @@ namespace AdapterArray
 
         }
 
-        private static int FindAmountOfDifferentArrangements(List<int> allEntries)
+        private static long FindAmountOfDifferentArrangements(List<int> allEntries)
         {
-            var arrangementAmount = 0;
 
             var joltingsInAscendingOrder = allEntries.AsEnumerable().OrderBy(number => number).ToList();
 
@@ -41,55 +40,67 @@ namespace AdapterArray
             var builtInJoltage = maxJoltage + 3;
             joltingsInAscendingOrder.Insert(joltingsInAscendingOrder.Count, builtInJoltage);
 
-            var joltingArrangements = new List<List<int>>();
+            // only last adapter arrangement is kept as key in the dictionary
+            // value is the amount of arrangements that end with the key
+            Dictionary<int, long> joltingArrangements = new Dictionary<int, long>();
 
-            foreach (var currentJolting in joltingsInAscendingOrder)
+            foreach (var currentAdapterJolting in joltingsInAscendingOrder)
             {
-                // there's no list created, so the first entry creates the first list
+                //Console.WriteLine($"checking {currentJolting}");
+
+                // there's no entry created
                 if (joltingArrangements.Count == 0)
                 {
-                    var firstArrangement = new List<int>() { currentJolting };
-                    joltingArrangements.Add(firstArrangement);
+
+                    joltingArrangements.Add(currentAdapterJolting, 1);
                 }
-                // there is already at least one list
+                // there is already at least one entry
                 else
                 {
-
-                    for (int index = 0; index < joltingArrangements.Count; )
+                    // go through all last entries in the arrangement of adapters
+                    foreach (var currentLastElementJolting in joltingArrangements.Keys.OrderBy(x => x).ToList())
                     {
 
-                        var currentArrangement = joltingArrangements[index];
-                        // check the difference between the list's last entry and the current jolting entry
-                        var lastEntryInList = currentArrangement.LastOrDefault();
-                        var difference = currentJolting - lastEntryInList;
+                        var amountOfCurrentLastElementJolting = joltingArrangements[currentLastElementJolting];
+                        // check the difference between the key (aka the arrangement's last adapter value) and the current jolting entry
+                        var difference = currentAdapterJolting - currentLastElementJolting;
 
                         switch (difference)
                         {
+                            // if the difference is 3, add the element to the arrangement
+                            // adding = switching the key (new last number in the arrangement)
                             case 3:
-                                {// if the difference is 3, add the element to the current list
-                                    currentArrangement.Add(currentJolting);
-                                    index++;
+                                {
+                                    joltingArrangements.Add(currentAdapterJolting, amountOfCurrentLastElementJolting);
+                                    joltingArrangements.Remove(currentLastElementJolting);
                                     break;
                                 }
                             case 0:
                                 {
-                                    index++;
                                     break;
                                 }
+                            // if the difference is < 3, dynamically add new arrangements
                             case < 3:
-                                // if the difference is < 3, dynamically add new arrangements 
                                 {
-                                    var newJoltingArrangement = new List<int>();
-                                    newJoltingArrangement.AddRange(currentArrangement);
-                                    newJoltingArrangement.Add(currentJolting);
-                                    joltingArrangements.Add(newJoltingArrangement);
-                                    index++;
+                                    // there is already an arrangement that contains the current adapter's jolting as last element
+                                    // there is an arrangement whose last element jolting is compatible with the current adapter's jolting
+                                    // add the amount of the found arrangement to the amount of the current adapter's entry
+                                    if (joltingArrangements.ContainsKey(currentAdapterJolting))
+                                    {
+                                        joltingArrangements[currentAdapterJolting] = joltingArrangements[currentAdapterJolting] + amountOfCurrentLastElementJolting;
+                                    }
+                                    // the current jolting adapter can be added at the end of the arrangements that
+                                    // have the current key as last element – therefore the value stays the same
+                                    else
+                                    {
+                                        joltingArrangements.Add(currentAdapterJolting, amountOfCurrentLastElementJolting);
+                                    }
                                     break;
                                 }
+                            // if difference is > 3, the arrangement can be removed (because there won't fit any following jolting)
                             case > 3:
-                                // if difference is > 3, the list can be removed (because there won't fit any following jolting)
                                 {
-                                    joltingArrangements.Remove(currentArrangement);
+                                    joltingArrangements.Remove(currentLastElementJolting);
                                     break;
                                 }
                         }
@@ -100,14 +111,8 @@ namespace AdapterArray
 
             }
 
-            // because the whole number of possible arrangements was built without the rule that the built-in
-            // joltage must be the last element, we reduce the result list here regarding this predicate
-            //var reducedArrangements =
-            //    joltingArrangements.Where(arrangement => arrangement.Last() == builtInJoltage).ToList();
+            return joltingArrangements.Values.Sum();
 
-            arrangementAmount = joltingArrangements.Count();
-
-            return arrangementAmount;
         }
 
         private static int FindOneAndThreeJoltageDifferences(List<int> allEntries)
