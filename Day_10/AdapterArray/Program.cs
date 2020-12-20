@@ -87,8 +87,9 @@ namespace AdapterArray
                                     break;
                                 }
                             case > 3:
+                                // if difference is > 3, the list can be removed (because there won't fit any following jolting)
                                 {
-                                    index++;
+                                    joltingArrangements.Remove(currentArrangement);
                                     break;
                                 }
                         }
@@ -101,10 +102,10 @@ namespace AdapterArray
 
             // because the whole number of possible arrangements was built without the rule that the built-in
             // joltage must be the last element, we reduce the result list here regarding this predicate
-            var reducedArrangements =
-                joltingArrangements.Where(arrangement => arrangement.Last() == builtInJoltage).ToList();
+            //var reducedArrangements =
+            //    joltingArrangements.Where(arrangement => arrangement.Last() == builtInJoltage).ToList();
 
-            arrangementAmount = reducedArrangements.Count();
+            arrangementAmount = joltingArrangements.Count();
 
             return arrangementAmount;
         }
