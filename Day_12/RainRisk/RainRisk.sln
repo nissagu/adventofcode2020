@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.808.3
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RainRisk", "RainRisk.csproj", "{0136A938-312B-4658-8796-0A6A97C1FD13}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{0136A938-312B-4658-8796-0A6A97C1FD13}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0136A938-312B-4658-8796-0A6A97C1FD13}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0136A938-312B-4658-8796-0A6A97C1FD13}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0136A938-312B-4658-8796-0A6A97C1FD13}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {24A8188F-FF00-4660-AE57-EEAE5A7EFDF6}
+	EndGlobalSection
+EndGlobal
