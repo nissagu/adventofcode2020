@@ -108,21 +108,23 @@ namespace SeatingSystem
             return changedSeatingMap;
         }
 
-        // part 1 method
         private static char CheckAndChangeSeatingStatus(char entry, char[,] map, int entryColumn, int entryRow, int columnCount, int rowCount)
         {
             var seatIsEmpty = entry.Equals('L');
             var seatIsOccupied = entry.Equals('#');
 
-            var hasNoOccupiedSeatsAdjacent = (CheckForOccupiedSeats(map, entryColumn, entryRow, columnCount, rowCount) == 0);
-            var hasAtLeastFourOccupiedSeatsAdjacent = (CheckForOccupiedSeats(map, entryColumn, entryRow, columnCount, rowCount) >= 4);
+            // part 1 variables and method
+            //var hasNoOccupiedSeatsAdjacent = (CheckForAdjacentOccupiedSeats(map, entryColumn, entryRow, columnCount, rowCount) == 0);
+            //var hasAtLeastFourOccupiedSeatsAdjacent = (CheckForOccupiedSeats(map, entryColumn, entryRow, columnCount, rowCount) >= 4);
+            var hasNoOccupiedSeatsAdjacent = (CheckForOccupiedSeatsInAllDirections(map, entryColumn, entryRow, columnCount, rowCount) == 0);
+            var hasAtLeastFiveOccupiedSeatsAdjacent = (CheckForOccupiedSeatsInAllDirections(map, entryColumn, entryRow, columnCount, rowCount) >= 5);
 
             // only cases where entry changes
             if (seatIsEmpty && hasNoOccupiedSeatsAdjacent)
             {
                 return '#';
             }
-            else if (seatIsOccupied && hasAtLeastFourOccupiedSeatsAdjacent)
+            else if (seatIsOccupied && hasAtLeastFiveOccupiedSeatsAdjacent)
             {
                 return 'L';
             }
@@ -131,8 +133,59 @@ namespace SeatingSystem
             return entry;
         }
 
+        private static int CheckForOccupiedSeatsInAllDirections(char[,] map, int entryColumn, int entryRow, int columnCount, int rowCount)
+        {
+            var directions = new List<Tuple<int, int>>() { new Tuple<int, int>(-1,-1), new Tuple<int, int>(0,-1),
+                                                        new Tuple<int, int>(1,-1), new Tuple<int, int>(-1,0),
+                                                        new Tuple<int, int>(1,0), new Tuple<int, int>(-1,1),
+                                                        new Tuple<int, int>(0,1), new Tuple<int, int>(1,1) };
+
+            var amountOfOccupiedSeats = 0;
+
+            foreach (var direction in directions)
+            {
+                var outOfMapBorder = false;
+                var occupiedSeatFound = false;
+                var emptySeatFound = false;
+
+                var checkColumn = entryColumn + direction.Item1;
+                var checkRow = entryRow + direction.Item2;
+
+                while (!outOfMapBorder && !occupiedSeatFound && !emptySeatFound)
+                {
+
+                    if (checkColumn > columnCount - 1 || checkColumn < 0 || checkRow > rowCount - 1 || checkRow < 0)
+                    {
+                        outOfMapBorder = true;
+                    } else
+                    {
+                        // if a seat is found, go to next direction
+                        if (map[checkColumn, checkRow] == '#')
+                        {
+                            occupiedSeatFound = true;
+                            amountOfOccupiedSeats++;
+                        }
+                        // if an empty seat is found, go to next direction
+                        else if (map[checkColumn, checkRow] == 'L')
+                        {
+                            emptySeatFound = true;
+                        }
+                        // with a floor entry continue checking
+                        else
+                        {
+                            checkColumn += direction.Item1;
+                            checkRow += direction.Item2;
+                        }
+                    }
+                }
+            }
+
+
+            return amountOfOccupiedSeats;
+        }
+
         // part 1 method
-        private static int CheckForOccupiedSeats(char[,] map, int column, int row, int columnCount, int rowCount)
+        private static int CheckForAdjacentOccupiedSeats(char[,] map, int column, int row, int columnCount, int rowCount)
         {
             // check positions and count sum of #-chars
 
@@ -150,6 +203,7 @@ namespace SeatingSystem
             return amountOfOccupiedSeats;
         }
 
+        // part 1 method
         private static List<Tuple<int, int>> GetAdjacentCoordinates(char[,] map, int column, int row, int columnCount, int rowCount)
         {
             // column - 1, row - 1 (upper left corner) -> not possible when column == 0 || row == 0
